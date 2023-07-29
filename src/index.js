@@ -5,7 +5,5 @@ import App from './components/App.js';
 
 const root = ReactDOM.createRoot(document.querySelector('.page'));
 root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
+  <App />
 );
