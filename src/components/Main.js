@@ -34,7 +34,7 @@ export default function Main(props) {
         <div className="profile__info">
           <div className="profile__avatar-data">
             <img className="profile__avatar" alt="Аватар профиля" src={userAvatar}/>
-            <button className="profile__avatar-update-icon" type="button" onClick={props.onEditAvatar}></button>
+            <button className="profile__avatar-update-button" type="button" onClick={props.onEditAvatar}><div className="profile__avatar-update-icon"></div></button>
           </div>
           <div className="profile__text-data">
             <h1 className="profile__name">{userName}</h1>
@@ -46,8 +46,8 @@ export default function Main(props) {
       </section>
 
       <div className="gallery">
-        {cards.map((card, i) => (
-          <div key={i} className="element">
+        {cards.map((card) => (
+          <div key={card._id} className="element">
             <Card onCardClick={props.onCardClick} card={card}/>
           </div>
         ))}

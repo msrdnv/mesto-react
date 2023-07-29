@@ -6,10 +6,3 @@
   aspect-ratio: 1/1;
   grid-area: avatar;
 }
-
-@media screen and (max-width: 635px) {
-  .profile__avatar {
-    display: flex;
-    align-self: center;
-  }
-}

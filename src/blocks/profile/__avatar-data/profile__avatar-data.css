@@ -10,6 +10,6 @@
   opacity: 0.2;
 }
 
-.profile__avatar-data:hover .profile__avatar-update-icon {
-  display: block;
+.profile__avatar-data:hover .profile__avatar-update-button {
+  display: flex;
 }
