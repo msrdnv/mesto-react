@@ -4,6 +4,8 @@ import Main from './Main.js';
 import Footer from './Footer.js';
 import ImagePopup from './ImagePopup.js';
 import PopupWithForm from './PopupWithForm.js';
+import { api } from '../utils/api.js';
+import { CurrentUserContext } from '../contexts/CurrentUserContext.js';
 
 export default function App() {
 
@@ -11,6 +13,28 @@ export default function App() {
   const [isEditProfilePopupOpen, setEditProfilePopupOpen] = React.useState(false);
   const [isAddPlacePopupOpen, setAddPlacePopupOpen] = React.useState(false);
   const [selectedCard, setSelectedCard] = React.useState({src: "./", isOpen: false});
+
+  const [currentUser, setCurrentUser] = React.useState({});
+
+  React.useEffect(() => {
+    api.getUserData()
+    .then((userData) => {
+      setCurrentUser(userData);
+      //console.log(userData);
+    })
+    .catch(console.error)
+  }, []);
+
+  const [cards, setCards] = React.useState([]);
+
+  React.useEffect(() => {
+    api.getCards()
+    .then((cards) => {
+      setCards(cards);
+      //console.log(cards);
+    })
+    .catch(console.error)
+  }, []);
 
   function handleEditAvatarClick() {
     setEditAvatarPopupOpen(true);
@@ -35,8 +59,25 @@ export default function App() {
     setSelectedCard({link, name, isOpen: true});
   }
 
+  function handleCardLike(card) {
+    const isLiked = card.likes.some(i => i._id === currentUser._id);
+    api.changeLikeCardStatus(card._id, isLiked)
+    .then((newCard) => {
+      setCards((state) => state.map((c) => c._id === card._id ? newCard : c));
+    })
+    .catch(console.error)
+  }
+
+  function handleCardDelete(card) {
+    api.deleteCard(card._id)
+    .then(() => {
+      setCards((state) => state.filter((c) => c._id !== card._id));
+    })
+    .catch(console.error)
+  }
+
   return (
-    <>
+    <CurrentUserContext.Provider value={currentUser}>
       <ImagePopup card={selectedCard} onClose={closeAllPopups}/>
       <PopupWithForm onClose={closeAllPopups} isOpen={isEditProfilePopupOpen} title="Редактировать профиль" name="profile" button="Сохранить">
           <input id="name-input" className="popup__input" type="text" name="name" minLength="2" maxLength="40" placeholder="Имя" required/>
@@ -56,9 +97,9 @@ export default function App() {
         <span className="avatar-link-input-error popup__error popup__error_visible"></span>
       </PopupWithForm>
       <Header/>
-      <Main onEditAvatar={handleEditAvatarClick} onEditProfile={handleEditProfileClick} onAddPlace={handleAddPlaceClick} onCardClick={handleCardClick}/>
+      <Main cards={cards} onEditAvatar={handleEditAvatarClick} onEditProfile={handleEditProfileClick} onAddPlace={handleAddPlaceClick} onCardClick={handleCardClick} onCardLike={handleCardLike} onCardDelete={handleCardDelete}/>
       <Footer/>
-    </>
+    </CurrentUserContext.Provider>
   );
 }
 

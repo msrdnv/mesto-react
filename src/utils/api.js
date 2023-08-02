@@ -32,13 +32,13 @@ class Api {
     return this._request(`${this._baseUrl}/cards`, { method: 'POST', headers: this._headers, body: JSON.stringify(data) });
   };
 
-  putLikeCard (cardId) {
-    return this._request(`${this._baseUrl}/cards/${cardId}/likes`, { method: 'PUT', headers: this._headers });
-  };
-
-  deleteLikeCard (cardId) {
-    return this._request(`${this._baseUrl}/cards/${cardId}/likes`, { method: 'DELETE', headers: this._headers });
-  };
+  changeLikeCardStatus (cardId, isLiked) {
+    if (!isLiked) {
+      return this._request(`${this._baseUrl}/cards/${cardId}/likes`, { method: 'PUT', headers: this._headers });
+    } else {
+      return this._request(`${this._baseUrl}/cards/${cardId}/likes`, { method: 'DELETE', headers: this._headers });
+    }
+  }
 
   deleteCard (cardId) {
     return this._request(`${this._baseUrl}/cards/${cardId}`, { method: 'DELETE', headers: this._headers });
