@@ -1,21 +1,21 @@
 import React from 'react';
 import PopupWithForm from './PopupWithForm.js'
 
-export default function AddPlacePopup (props) {
+export default function AddPlacePopup ({onAddPlace, isOpen, onClose, onResetForm}) {
 
   const nameRef = React.useRef();
   const linkRef = React.useRef();
 
-    function handleSubmit(evt) {
+  function handleSubmit(evt) {
     evt.preventDefault();
-    props.onAddPlace({
+    onAddPlace({
       name: nameRef.current.value,
       link: linkRef.current.value,
-    });
+    }, evt);
   }
 
   return (
-    <PopupWithForm onClose={props.onClose} isOpen={props.isOpen} onSubmit={handleSubmit} title="Новое место" name="card" button="Создать">
+    <PopupWithForm onClose={onClose} isOpen={isOpen} onSubmit={handleSubmit} onReset={onResetForm} title="Новое место" name="card" button="Создать">
       <input ref={nameRef} id="card-name-input" className="popup__input" type="text" name="name" minLength="2" maxLength="30" placeholder="Название" required/>
       <span className="card-name-input-error popup__error popup__error_visible"></span>
       <input ref={linkRef} id="link-input" className="popup__input" type="url" name="link" placeholder="Ссылка на картинку" required/>

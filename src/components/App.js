@@ -18,19 +18,15 @@ export default function App() {
   const [selectedCard, setSelectedCard] = React.useState({src: "./", isOpen: false});
 
   const [currentUser, setCurrentUser] = React.useState({});
-
-  React.useEffect(() => {
-    api.getUserData()
-    .then((userData) => setCurrentUser(userData))
-    .catch(console.error)
-  }, []);
-
   const [cards, setCards] = React.useState([]);
 
   React.useEffect(() => {
-    api.getCards()
-    .then((cards) => setCards(cards))
-    .catch(console.error)
+    Promise.all([api.getUserData(), api.getCards()])
+    .then(([userData, cards]) => {
+      setCurrentUser(userData)
+      setCards(cards)
+    })
+    .catch(console.error);
   }, []);
 
   function handleEditAvatarClick() {
@@ -87,13 +83,18 @@ export default function App() {
     .catch(console.error)
   }
 
-  function handleAddPlaceSubmit({name, link}) {
+  function handleAddPlaceSubmit({name, link}, evt) {
     api.postNewCard({name, link})
     .then((newCard) => {
       setCards([newCard, ...cards]);
       closeAllPopups();
+      resetAddPlaceForm(evt);
     })
     .catch(console.error)
+  }
+
+  function resetAddPlaceForm(evt) {
+    evt.target.reset();
   }
 
   return (
@@ -101,7 +102,7 @@ export default function App() {
       <ImagePopup card={selectedCard} onClose={closeAllPopups}/>
       <EditAvatarPopup isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups} onUpdateAvatar={handleUpdateAvatar}/>
       <EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} onUpdateUser={handleUpdateUser}/>
-      <AddPlacePopup isOpen={isAddPlacePopupOpen} onClose={closeAllPopups} onAddPlace={handleAddPlaceSubmit}/>
+      <AddPlacePopup isOpen={isAddPlacePopupOpen} onClose={closeAllPopups} onAddPlace={handleAddPlaceSubmit} onResetForm={resetAddPlaceForm}/>
       <PopupWithForm title="Вы уверены?" name="confirmation" button="Да"/>
       <Header/>
       <Main cards={cards} onEditAvatar={handleEditAvatarClick} onEditProfile={handleEditProfileClick} onAddPlace={handleAddPlaceClick}

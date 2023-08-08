@@ -1,13 +1,13 @@
-export default function PopupWithForm(props) {
+export default function PopupWithForm({name, button, title, children, isOpen, onClose, onSubmit, onMouseDown, onReset}) {
   return (
-    <div onMouseDown={props.onMouseDown} className={props.isOpen ? `popup ${props.name}-popup popup_opened` : `popup ${props.name}-popup`}>
-       <div className={props.name === "confirmation" ? "popup__container popup__container_place-confirmation" : "popup__container" &&
-       props.name === "avatar" ? "popup__container popup__container_place-avatar" : "popup__container"}>
-        <button className="popup__close-icon" type="button" onClick={props.onClose}></button>
-        <h2 className={props.name === "confirmation" ? "popup__title popup__title_place-confirmation" : "popup__title"}>{props.title}</h2>
-        <form onSubmit={props.onSubmit} className="popup__form" name={`${props.name}-form`} noValidate>
-          {props.children};
-          <button className="popup__submit-button" type="submit">{props.button}</button>;
+    <div onMouseDown={onMouseDown} className={isOpen ? `popup ${name}-popup popup_opened` : `popup ${name}-popup`}>
+       <div className={name === "confirmation" ? "popup__container popup__container_place-confirmation" : "popup__container" &&
+       name === "avatar" ? "popup__container popup__container_place-avatar" : "popup__container"}>
+        <button className="popup__close-icon" type="button" onClick={onClose}></button>
+        <h2 className={name === "confirmation" ? "popup__title popup__title_place-confirmation" : "popup__title"}>{title}</h2>
+        <form onSubmit={onSubmit} onReset={onReset} className="popup__form" name={`${name}-form`}>
+          {children}
+          <button className="popup__submit-button" type="submit">{button}</button>
         </form>
       </div>
     </div>
