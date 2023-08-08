@@ -88,13 +88,9 @@ export default function App() {
     .then((newCard) => {
       setCards([newCard, ...cards]);
       closeAllPopups();
-      resetAddPlaceForm(evt);
+      evt.target.reset();
     })
     .catch(console.error)
-  }
-
-  function resetAddPlaceForm(evt) {
-    evt.target.reset();
   }
 
   return (
@@ -102,7 +98,7 @@ export default function App() {
       <ImagePopup card={selectedCard} onClose={closeAllPopups}/>
       <EditAvatarPopup isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups} onUpdateAvatar={handleUpdateAvatar}/>
       <EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} onUpdateUser={handleUpdateUser}/>
-      <AddPlacePopup isOpen={isAddPlacePopupOpen} onClose={closeAllPopups} onAddPlace={handleAddPlaceSubmit} onResetForm={resetAddPlaceForm}/>
+      <AddPlacePopup isOpen={isAddPlacePopupOpen} onClose={closeAllPopups} onAddPlace={handleAddPlaceSubmit}/>
       <PopupWithForm title="Вы уверены?" name="confirmation" button="Да"/>
       <Header/>
       <Main cards={cards} onEditAvatar={handleEditAvatarClick} onEditProfile={handleEditProfileClick} onAddPlace={handleAddPlaceClick}
