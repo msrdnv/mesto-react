@@ -1,4 +1,4 @@
-export default function PopupWithForm({name, button, title, children, isOpen, onClose, onSubmit, onMouseDown, onReset}) {
+export default function PopupWithForm({name, button, title, children, isOpen, onClose, onSubmit, onMouseDown}) {
   return (
     <div onMouseDown={onMouseDown} className={isOpen ? `popup ${name}-popup popup_opened` : `popup ${name}-popup`}>
        <div className={name === "confirmation" ? "popup__container popup__container_place-confirmation" : "popup__container" &&
